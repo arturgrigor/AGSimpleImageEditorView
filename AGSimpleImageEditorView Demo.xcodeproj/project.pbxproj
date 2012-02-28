@@ -1,0 +1,295 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FE7C6EF014FD2213005921A5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE7C6EEF14FD2213005921A5 /* UIKit.framework */; };
+		FE7C6EF214FD2213005921A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE7C6EF114FD2213005921A5 /* Foundation.framework */; };
+		FE7C6EF414FD2213005921A5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE7C6EF314FD2213005921A5 /* CoreGraphics.framework */; };
+		FE7C6EFA14FD2213005921A5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FE7C6EF814FD2213005921A5 /* InfoPlist.strings */; };
+		FE7C6EFC14FD2213005921A5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FE7C6EFB14FD2213005921A5 /* main.m */; };
+		FE7C6F0014FD2213005921A5 /* AGAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FE7C6EFF14FD2213005921A5 /* AGAppDelegate.m */; };
+		FE7C6F0314FD2213005921A5 /* AGViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE7C6F0214FD2213005921A5 /* AGViewController.m */; };
+		FE7C6F0614FD2213005921A5 /* AGViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE7C6F0414FD2213005921A5 /* AGViewController_iPhone.xib */; };
+		FE7C6F0914FD2213005921A5 /* AGViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE7C6F0714FD2213005921A5 /* AGViewController_iPad.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		FE7C6EEB14FD2212005921A5 /* AGSimpleImageEditorView Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AGSimpleImageEditorView Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE7C6EEF14FD2213005921A5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		FE7C6EF114FD2213005921A5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		FE7C6EF314FD2213005921A5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		FE7C6EF714FD2213005921A5 /* AGSimpleImageEditorView Demo-Info.plist */ = {isa = PBXFileReference; path = "AGSimpleImageEditorView Demo-Info.plist"; sourceTree = "<group>"; };
+		FE7C6EF914FD2213005921A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		FE7C6EFB14FD2213005921A5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		FE7C6EFD14FD2213005921A5 /* AGSimpleImageEditorView Demo-Prefix.pch */ = {isa = PBXFileReference; path = "AGSimpleImageEditorView Demo-Prefix.pch"; sourceTree = "<group>"; };
+		FE7C6EFE14FD2213005921A5 /* AGAppDelegate.h */ = {isa = PBXFileReference; path = AGAppDelegate.h; sourceTree = "<group>"; };
+		FE7C6EFF14FD2213005921A5 /* AGAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AGAppDelegate.m; sourceTree = "<group>"; };
+		FE7C6F0114FD2213005921A5 /* AGViewController.h */ = {isa = PBXFileReference; path = AGViewController.h; sourceTree = "<group>"; };
+		FE7C6F0214FD2213005921A5 /* AGViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AGViewController.m; sourceTree = "<group>"; };
+		FE7C6F0514FD2213005921A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AGViewController_iPhone.xib; sourceTree = "<group>"; };
+		FE7C6F0814FD2213005921A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AGViewController_iPad.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FE7C6EE814FD2212005921A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FE7C6EF014FD2213005921A5 /* UIKit.framework in Frameworks */,
+				FE7C6EF214FD2213005921A5 /* Foundation.framework in Frameworks */,
+				FE7C6EF414FD2213005921A5 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FE7C6EE014FD2212005921A5 = {
+			isa = PBXGroup;
+			children = (
+				FE7C6EF514FD2213005921A5 /* AGSimpleImageEditorView Demo */,
+				FE7C6EEE14FD2213005921A5 /* Frameworks */,
+				FE7C6EEC14FD2212005921A5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FE7C6EEC14FD2212005921A5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FE7C6EEB14FD2212005921A5 /* AGSimpleImageEditorView Demo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FE7C6EEE14FD2213005921A5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FE7C6EEF14FD2213005921A5 /* UIKit.framework */,
+				FE7C6EF114FD2213005921A5 /* Foundation.framework */,
+				FE7C6EF314FD2213005921A5 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FE7C6EF514FD2213005921A5 /* AGSimpleImageEditorView Demo */ = {
+			isa = PBXGroup;
+			children = (
+				FE7C6EFE14FD2213005921A5 /* AGAppDelegate.h */,
+				FE7C6EFF14FD2213005921A5 /* AGAppDelegate.m */,
+				FE7C6F0114FD2213005921A5 /* AGViewController.h */,
+				FE7C6F0214FD2213005921A5 /* AGViewController.m */,
+				FE7C6F0414FD2213005921A5 /* AGViewController_iPhone.xib */,
+				FE7C6F0714FD2213005921A5 /* AGViewController_iPad.xib */,
+				FE7C6EF614FD2213005921A5 /* Supporting Files */,
+			);
+			path = "AGSimpleImageEditorView Demo";
+			sourceTree = "<group>";
+		};
+		FE7C6EF614FD2213005921A5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FE7C6EF714FD2213005921A5 /* AGSimpleImageEditorView Demo-Info.plist */,
+				FE7C6EF814FD2213005921A5 /* InfoPlist.strings */,
+				FE7C6EFB14FD2213005921A5 /* main.m */,
+				FE7C6EFD14FD2213005921A5 /* AGSimpleImageEditorView Demo-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FE7C6EEA14FD2212005921A5 /* AGSimpleImageEditorView Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FE7C6F0C14FD2213005921A5 /* Build configuration list for PBXNativeTarget "AGSimpleImageEditorView Demo" */;
+			buildPhases = (
+				FE7C6EE714FD2212005921A5 /* Sources */,
+				FE7C6EE814FD2212005921A5 /* Frameworks */,
+				FE7C6EE914FD2212005921A5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AGSimpleImageEditorView Demo";
+			productName = "AGSimpleImageEditorView Demo";
+			productReference = FE7C6EEB14FD2212005921A5 /* AGSimpleImageEditorView Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FE7C6EE214FD2212005921A5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = AG;
+				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = "Universitatea \"Babes-Bolyai\"";
+			};
+			buildConfigurationList = FE7C6EE514FD2212005921A5 /* Build configuration list for PBXProject "AGSimpleImageEditorView Demo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = FE7C6EE014FD2212005921A5;
+			productRefGroup = FE7C6EEC14FD2212005921A5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FE7C6EEA14FD2212005921A5 /* AGSimpleImageEditorView Demo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FE7C6EE914FD2212005921A5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FE7C6EFA14FD2213005921A5 /* InfoPlist.strings in Resources */,
+				FE7C6F0614FD2213005921A5 /* AGViewController_iPhone.xib in Resources */,
+				FE7C6F0914FD2213005921A5 /* AGViewController_iPad.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FE7C6EE714FD2212005921A5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FE7C6EFC14FD2213005921A5 /* main.m in Sources */,
+				FE7C6F0014FD2213005921A5 /* AGAppDelegate.m in Sources */,
+				FE7C6F0314FD2213005921A5 /* AGViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		FE7C6EF814FD2213005921A5 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FE7C6EF914FD2213005921A5 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		FE7C6F0414FD2213005921A5 /* AGViewController_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FE7C6F0514FD2213005921A5 /* en */,
+			);
+			name = AGViewController_iPhone.xib;
+			sourceTree = "<group>";
+		};
+		FE7C6F0714FD2213005921A5 /* AGViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FE7C6F0814FD2213005921A5 /* en */,
+			);
+			name = AGViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		FE7C6F0A14FD2213005921A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FE7C6F0B14FD2213005921A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FE7C6F0D14FD2213005921A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AGSimpleImageEditorView Demo/AGSimpleImageEditorView Demo-Prefix.pch";
+				INFOPLIST_FILE = "AGSimpleImageEditorView Demo/AGSimpleImageEditorView Demo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		FE7C6F0E14FD2213005921A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AGSimpleImageEditorView Demo/AGSimpleImageEditorView Demo-Prefix.pch";
+				INFOPLIST_FILE = "AGSimpleImageEditorView Demo/AGSimpleImageEditorView Demo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FE7C6EE514FD2212005921A5 /* Build configuration list for PBXProject "AGSimpleImageEditorView Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FE7C6F0A14FD2213005921A5 /* Debug */,
+				FE7C6F0B14FD2213005921A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FE7C6F0C14FD2213005921A5 /* Build configuration list for PBXNativeTarget "AGSimpleImageEditorView Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FE7C6F0D14FD2213005921A5 /* Debug */,
+				FE7C6F0E14FD2213005921A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FE7C6EE214FD2212005921A5 /* Project object */;
+}
