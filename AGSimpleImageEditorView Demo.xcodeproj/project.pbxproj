@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FE2C0BE314FD225F001FAC87 /* apple.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FE2C0BE014FD225F001FAC87 /* apple.jpg */; };
+		FE2C0BE414FD225F001FAC87 /* panorama.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FE2C0BE114FD225F001FAC87 /* panorama.jpg */; };
+		FE2C0BE514FD225F001FAC87 /* springboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FE2C0BE214FD225F001FAC87 /* springboard.jpg */; };
+		FE2C0BEA14FD2268001FAC87 /* AGSimpleImageEditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = FE2C0BE914FD2268001FAC87 /* AGSimpleImageEditorView.m */; };
+		FE2C0BEC14FD2335001FAC87 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE2C0BEB14FD2335001FAC87 /* AssetsLibrary.framework */; };
+		FE2C0BF214FD2778001FAC87 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE2C0BF114FD2778001FAC87 /* QuartzCore.framework */; };
+		FE2C0BF514FD28C0001FAC87 /* transparencyPattern.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2C0BF414FD28C0001FAC87 /* transparencyPattern.png */; };
+		FE2C0BF714FD32AB001FAC87 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE2C0BF614FD32AB001FAC87 /* CoreImage.framework */; };
 		FE7C6EF014FD2213005921A5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE7C6EEF14FD2213005921A5 /* UIKit.framework */; };
 		FE7C6EF214FD2213005921A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE7C6EF114FD2213005921A5 /* Foundation.framework */; };
 		FE7C6EF414FD2213005921A5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE7C6EF314FD2213005921A5 /* CoreGraphics.framework */; };
@@ -19,17 +27,26 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FE2C0BE014FD225F001FAC87 /* apple.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = apple.jpg; sourceTree = "<group>"; };
+		FE2C0BE114FD225F001FAC87 /* panorama.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = panorama.jpg; sourceTree = "<group>"; };
+		FE2C0BE214FD225F001FAC87 /* springboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = springboard.jpg; sourceTree = "<group>"; };
+		FE2C0BE814FD2268001FAC87 /* AGSimpleImageEditorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGSimpleImageEditorView.h; sourceTree = "<group>"; };
+		FE2C0BE914FD2268001FAC87 /* AGSimpleImageEditorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGSimpleImageEditorView.m; sourceTree = "<group>"; };
+		FE2C0BEB14FD2335001FAC87 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		FE2C0BF114FD2778001FAC87 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		FE2C0BF414FD28C0001FAC87 /* transparencyPattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = transparencyPattern.png; sourceTree = "<group>"; };
+		FE2C0BF614FD32AB001FAC87 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		FE7C6EEB14FD2212005921A5 /* AGSimpleImageEditorView Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AGSimpleImageEditorView Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE7C6EEF14FD2213005921A5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		FE7C6EF114FD2213005921A5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FE7C6EF314FD2213005921A5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		FE7C6EF714FD2213005921A5 /* AGSimpleImageEditorView Demo-Info.plist */ = {isa = PBXFileReference; path = "AGSimpleImageEditorView Demo-Info.plist"; sourceTree = "<group>"; };
+		FE7C6EF714FD2213005921A5 /* AGSimpleImageEditorView Demo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AGSimpleImageEditorView Demo-Info.plist"; sourceTree = "<group>"; };
 		FE7C6EF914FD2213005921A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FE7C6EFB14FD2213005921A5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		FE7C6EFD14FD2213005921A5 /* AGSimpleImageEditorView Demo-Prefix.pch */ = {isa = PBXFileReference; path = "AGSimpleImageEditorView Demo-Prefix.pch"; sourceTree = "<group>"; };
-		FE7C6EFE14FD2213005921A5 /* AGAppDelegate.h */ = {isa = PBXFileReference; path = AGAppDelegate.h; sourceTree = "<group>"; };
+		FE7C6EFD14FD2213005921A5 /* AGSimpleImageEditorView Demo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AGSimpleImageEditorView Demo-Prefix.pch"; sourceTree = "<group>"; };
+		FE7C6EFE14FD2213005921A5 /* AGAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AGAppDelegate.h; sourceTree = "<group>"; };
 		FE7C6EFF14FD2213005921A5 /* AGAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AGAppDelegate.m; sourceTree = "<group>"; };
-		FE7C6F0114FD2213005921A5 /* AGViewController.h */ = {isa = PBXFileReference; path = AGViewController.h; sourceTree = "<group>"; };
+		FE7C6F0114FD2213005921A5 /* AGViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AGViewController.h; sourceTree = "<group>"; };
 		FE7C6F0214FD2213005921A5 /* AGViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AGViewController.m; sourceTree = "<group>"; };
 		FE7C6F0514FD2213005921A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AGViewController_iPhone.xib; sourceTree = "<group>"; };
 		FE7C6F0814FD2213005921A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AGViewController_iPad.xib; sourceTree = "<group>"; };
@@ -40,6 +57,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE2C0BF714FD32AB001FAC87 /* CoreImage.framework in Frameworks */,
+				FE2C0BF214FD2778001FAC87 /* QuartzCore.framework in Frameworks */,
+				FE2C0BEC14FD2335001FAC87 /* AssetsLibrary.framework in Frameworks */,
 				FE7C6EF014FD2213005921A5 /* UIKit.framework in Frameworks */,
 				FE7C6EF214FD2213005921A5 /* Foundation.framework in Frameworks */,
 				FE7C6EF414FD2213005921A5 /* CoreGraphics.framework in Frameworks */,
@@ -49,9 +69,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FE2C0BE714FD2268001FAC87 /* AGSimpleImageEditorView */ = {
+			isa = PBXGroup;
+			children = (
+				FE2C0BF314FD28B2001FAC87 /* Resources */,
+				FE2C0BE814FD2268001FAC87 /* AGSimpleImageEditorView.h */,
+				FE2C0BE914FD2268001FAC87 /* AGSimpleImageEditorView.m */,
+			);
+			name = AGSimpleImageEditorView;
+			path = "AGSimpleImageEditorView Demo/AGSimpleImageEditorView";
+			sourceTree = "<group>";
+		};
+		FE2C0BF314FD28B2001FAC87 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FE2C0BF414FD28C0001FAC87 /* transparencyPattern.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		FE7C6EE014FD2212005921A5 = {
 			isa = PBXGroup;
 			children = (
+				FE2C0BE714FD2268001FAC87 /* AGSimpleImageEditorView */,
 				FE7C6EF514FD2213005921A5 /* AGSimpleImageEditorView Demo */,
 				FE7C6EEE14FD2213005921A5 /* Frameworks */,
 				FE7C6EEC14FD2212005921A5 /* Products */,
@@ -69,6 +109,9 @@
 		FE7C6EEE14FD2213005921A5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FE2C0BF614FD32AB001FAC87 /* CoreImage.framework */,
+				FE2C0BF114FD2778001FAC87 /* QuartzCore.framework */,
+				FE2C0BEB14FD2335001FAC87 /* AssetsLibrary.framework */,
 				FE7C6EEF14FD2213005921A5 /* UIKit.framework */,
 				FE7C6EF114FD2213005921A5 /* Foundation.framework */,
 				FE7C6EF314FD2213005921A5 /* CoreGraphics.framework */,
@@ -93,6 +136,9 @@
 		FE7C6EF614FD2213005921A5 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FE2C0BE014FD225F001FAC87 /* apple.jpg */,
+				FE2C0BE114FD225F001FAC87 /* panorama.jpg */,
+				FE2C0BE214FD225F001FAC87 /* springboard.jpg */,
 				FE7C6EF714FD2213005921A5 /* AGSimpleImageEditorView Demo-Info.plist */,
 				FE7C6EF814FD2213005921A5 /* InfoPlist.strings */,
 				FE7C6EFB14FD2213005921A5 /* main.m */,
@@ -156,6 +202,10 @@
 				FE7C6EFA14FD2213005921A5 /* InfoPlist.strings in Resources */,
 				FE7C6F0614FD2213005921A5 /* AGViewController_iPhone.xib in Resources */,
 				FE7C6F0914FD2213005921A5 /* AGViewController_iPad.xib in Resources */,
+				FE2C0BE314FD225F001FAC87 /* apple.jpg in Resources */,
+				FE2C0BE414FD225F001FAC87 /* panorama.jpg in Resources */,
+				FE2C0BE514FD225F001FAC87 /* springboard.jpg in Resources */,
+				FE2C0BF514FD28C0001FAC87 /* transparencyPattern.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,6 +219,7 @@
 				FE7C6EFC14FD2213005921A5 /* main.m in Sources */,
 				FE7C6F0014FD2213005921A5 /* AGAppDelegate.m in Sources */,
 				FE7C6F0314FD2213005921A5 /* AGViewController.m in Sources */,
+				FE2C0BEA14FD2268001FAC87 /* AGSimpleImageEditorView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +339,7 @@
 				FE7C6F0E14FD2213005921A5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+#import "AGSimpleImageEditorView.h"
+
 @interface AGViewController : UIViewController
+{
+    AGSimpleImageEditorView *simpleImageEditorView;
+    UISegmentedControl *ratioSegmentedControl;
+}
 
 @end
