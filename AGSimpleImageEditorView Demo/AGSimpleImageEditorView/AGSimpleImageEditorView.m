@@ -34,8 +34,10 @@
 //  Image
 //
 - (UIImage *)imageFromInstance:(id)instance;
+- (void)redisplayImage;
 - (void)displayImage:(id)instance;
 - (void)overlayClipping;
+- (void)rotateImageForImageView:(UIImageView *)imageView withDuration:(NSTimeInterval)duration andDegrees:(CGFloat)degrees;
 
 //
 //  Ratio
@@ -55,7 +57,7 @@
 
 #pragma mark - Properties
 
-@synthesize imageView, overlayView, ratioView, asset, image, ratio, ratioControlsHidden, ratioViewBorderColor, ratioViewBorderWidth, borderColor, borderWidth;
+@synthesize imageView, overlayView, ratioView, asset, image, ratio, ratioControlsHidden, ratioViewBorderColor, ratioViewBorderWidth, borderColor, borderWidth, rotationDegree;
 
 - (void)setAsset:(ALAsset *)theAsset
 {
@@ -139,7 +141,18 @@
     self.layer.borderWidth = borderWidth;
     
     // Reposition image
-    [self displayImage:displayedInstance];
+    [self redisplayImage];
+}
+
+- (void)setRotationDegree:(CGFloat)theRotationDegree
+{
+    rotationDegree = theRotationDegree;
+    if (rotationDegree > 360.f)
+        rotationDegree = theRotationDegree - 360;
+    else if (rotationDegree < -360.f)
+        rotationDegree = 360 - abs(theRotationDegree);
+    
+    [self rotateImageForImageView:self.imageView withDuration:1.f andDegrees:rotationDegree];
 }
 
 #pragma mark - Object Lifecycle
@@ -171,6 +184,8 @@
         // Creating the image view
         imageView = [[UIImageView alloc] initWithFrame:self.frame];
         imageView.userInteractionEnabled = NO;
+        imageView.layer.anchorPoint = CGPointMake(0.5f, 0.5f);
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
         
         // Overlay
         overlayView = [[UIView alloc] initWithFrame:imageView.frame];
@@ -221,6 +236,23 @@
     return [self initWithAsset:nil image:nil andFrame:frame];
 }
 
+#pragma mark - View
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    CGRect frame = CGRectMake(
+                              self.borderWidth, 
+                              self.borderWidth, 
+                              self.frame.size.width - (self.borderWidth * 2), 
+                              self.frame.size.height - (self.borderWidth * 2));
+    self.imageView.frame = frame;
+}
+
 #pragma mark - Image
 
 - (UIImage *)imageFromInstance:(id)instance
@@ -233,6 +265,11 @@
         return nil;
 }
 
+- (void)redisplayImage
+{
+    [self displayImage:displayedInstance];
+}
+
 - (void)displayImage:(id)instance
 {
     if (instance == nil)
@@ -240,15 +277,9 @@
     
     displayedInstance = instance;
     
-    CGRect frame = CGRectMake(
-                              self.borderWidth, 
-                              self.borderWidth, 
-                              self.frame.size.width - (self.borderWidth * 2), 
-                              self.frame.size.height - (self.borderWidth * 2));
-    
     [self.imageView setImage:[self imageFromInstance:instance]];
-    [self.imageView setFrame:[self centerForImage:self.imageView.image inRect:frame scaleIfNeeded:YES]];
-
+//    [self.imageView setFrame:[self centerForImage:self.imageView.image inRect:frame scaleIfNeeded:YES]];
+    
     [self.overlayView setFrame:CGRectMake(0, 0, self.imageView.frame.size.width, self.imageView.frame.size.height)];
     [self.ratioView setFrame:CGRectMake(0, 0, self.imageView.frame.size.width, self.imageView.frame.size.height)];
 }
@@ -283,6 +314,23 @@
 
     self.overlayView.layer.mask = maskLayer;
     [maskLayer release];
+}
+
+- (void)rotateImageForImageView:(UIImageView *)theImageView withDuration:(NSTimeInterval)duration andDegrees:(CGFloat)degrees
+{
+    [UIView animateWithDuration:duration animations:^{
+        theImageView.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(degrees));
+    }];
+}
+
+- (void)rotateLeft
+{
+    self.rotationDegree = self.rotationDegree - 90.f;
+}
+
+- (void)rotateRight
+{
+    self.rotationDegree = self.rotationDegree + 90.f;
 }
 
 #pragma mark - Calculations

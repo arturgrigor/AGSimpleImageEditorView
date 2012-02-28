@@ -24,6 +24,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import <CoreImage/CoreImage.h>
 
+#define DEGREES_TO_RADIANS(angle) (angle / 180.0 * M_PI)
+
 @interface AGSimpleImageEditorView : UIView
 {
     id displayedInstance;
@@ -39,7 +41,9 @@
     UIColor *ratioViewBorderColor;
     CGFloat ratioViewBorderWidth;
     UIColor *borderColor;
-    CGFloat borderWidth;    
+    CGFloat borderWidth;
+    
+    CGFloat rotationDegree;
 }
 
 @property (nonatomic, copy) ALAsset *asset;
@@ -49,8 +53,12 @@
 @property (nonatomic, assign) CGFloat ratioViewBorderWidth;
 @property (nonatomic, retain) UIColor *borderColor;
 @property (nonatomic, assign) CGFloat borderWidth;
+@property (nonatomic, assign) CGFloat rotationDegree;
 
 - (id)initWithAsset:(ALAsset *)theAsset;
 - (id)initWithImage:(UIImage *)theImage;
+
+- (void)rotateLeft;
+- (void)rotateRight;
 
 @end

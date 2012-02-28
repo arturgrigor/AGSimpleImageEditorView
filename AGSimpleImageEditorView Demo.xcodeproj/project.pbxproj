@@ -175,7 +175,7 @@
 			attributes = {
 				CLASSPREFIX = AG;
 				LastUpgradeCheck = 0430;
-				ORGANIZATIONNAME = "Universitatea \"Babes-Bolyai\"";
+				ORGANIZATIONNAME = "Artur Grigor";
 			};
 			buildConfigurationList = FE7C6EE514FD2212005921A5 /* Build configuration list for PBXProject "AGSimpleImageEditorView Demo" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -304,6 +304,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AGSimpleImageEditorView Demo/AGSimpleImageEditorView Demo-Prefix.pch";
 				INFOPLIST_FILE = "AGSimpleImageEditorView Demo/AGSimpleImageEditorView Demo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -315,6 +316,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AGSimpleImageEditorView Demo/AGSimpleImageEditorView Demo-Prefix.pch";
 				INFOPLIST_FILE = "AGSimpleImageEditorView Demo/AGSimpleImageEditorView Demo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
