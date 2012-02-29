@@ -26,6 +26,7 @@
 @property (nonatomic, retain) UIImageView *imageView;
 @property (nonatomic, retain) UIView *overlayView;
 @property (nonatomic, retain) UIView *ratioView;
+@property (nonatomic, retain) UIView *ratioControlsView;
 
 - (id)initWithAsset:(ALAsset *)theAsset image:(UIImage *)theImage andFrame:(CGRect)frame;
 - (id)initWithAsset:(ALAsset *)theAsset andImage:(UIImage *)theImage;
@@ -60,7 +61,7 @@
 
 #pragma mark - Properties
 
-@synthesize imageView, overlayView, ratioView, asset, image, ratio, ratioControlsHidden, ratioViewBorderColor, ratioViewBorderWidth, borderColor, borderWidth, rotation, animationDuration;
+@synthesize imageView, overlayView, ratioView, ratioControlsView, asset, image, ratio, ratioControlsHidden, ratioViewBorderColor, ratioViewBorderWidth, borderColor, borderWidth, rotation, animationDuration;
 
 - (void)setAsset:(ALAsset *)theAsset
 {
@@ -90,8 +91,8 @@
     
     if (ratio > 0)
     {
-        self.ratioView.frame = [self rectForRatio:self.ratio];
-        [self overlayClipping];
+        // Reposition ratio controls
+        [self repositionRatioControls];
     }
 
     [self showOrHideTheRatioControls];
@@ -99,8 +100,7 @@
 
 - (void)setRatioControlsHidden:(BOOL)theRatioControlsHidden
 {
-    self.overlayView.hidden = theRatioControlsHidden;
-    self.ratioView.hidden = theRatioControlsHidden;
+    self.ratioControlsView.hidden = theRatioControlsHidden;
 }
 
 - (void)showOrHideTheRatioControls
@@ -165,6 +165,7 @@
     [ratioViewBorderColor release];
     [ratioView release];
     [overlayView release];
+    [ratioControlsView release];
     [imageView release];
     
     [asset release];
@@ -198,20 +199,25 @@
         imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         [self addSubview:imageView];
         
+        // Ratio Controls View
+        ratioControlsView = [[UIView alloc] initWithFrame:imageView.frame];
+        ratioControlsView.hidden = YES;
+        ratioControlsView.autoresizesSubviews = YES;
+        
         // Overlay
-        overlayView = [[UIView alloc] initWithFrame:imageView.frame];
+        overlayView = [[UIView alloc] initWithFrame:CGRectZero];
         overlayView.alpha = .5;
-        overlayView.hidden = YES;
         overlayView.backgroundColor = [UIColor blackColor];
         overlayView.userInteractionEnabled = NO;
         overlayView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        [self addSubview:overlayView];
+        [ratioControlsView addSubview:overlayView];
         
         // Ratio view
-        ratioView = [[UIView alloc] initWithFrame:[self rectForRatio:self.ratio]];
-        ratioView.hidden = YES;
-        ratioView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        [self addSubview:ratioView];
+        ratioView = [[UIView alloc] initWithFrame:CGRectZero];
+        ratioView.autoresizingMask = UIViewAutoresizingNone;
+        [ratioControlsView addSubview:ratioView];
+        
+        [self addSubview:ratioControlsView];
         
         self.asset = theAsset;
         self.image = theImage;
@@ -300,15 +306,19 @@
 
 - (void)repositionRatioControls
 {
-    CGRect imageFrame = [self imageFrameFromImageViewWithAspectFitMode:self.imageView];
-    CGRect positionFrame = CGRectMake(
-                                      self.imageView.frame.origin.x + imageFrame.origin.x, 
-                                      self.imageView.frame.origin.y + imageFrame.origin.y, 
-                                      imageFrame.size.width, 
-                                      imageFrame.size.height);
+    CGRect actualImageRect = [self imageFrameFromImageViewWithAspectFitMode:self.imageView];
+    CGRect frame = CGRectZero;
+    CGFloat imageRatio = self.imageView.image.size.width / self.imageView.image.size.height;
+    if (imageRatio > self.ratio) {
+        // Width > Height
+        frame = CGRectMake(0, 0, self.ratio * actualImageRect.size.height, actualImageRect.size.height);
+    } else {
+        // Height > Width
+        frame = CGRectMake(0, 0, actualImageRect.size.width, actualImageRect.size.width / self.ratio);
+    }
 
-    [self.overlayView setFrame:positionFrame];
-    [self.ratioView setFrame:positionFrame];
+    [self.ratioView setFrame:frame];
+    [self.ratioControlsView setFrame:actualImageRect];
 
     // Reset overlay clipping
     [self overlayClipping];
@@ -339,7 +349,7 @@
     CGPathAddRect(path, nil, CGRectMake(0, 
                                         self.ratioView.frame.origin.y + self.ratioView.frame.size.height, 
                                         self.overlayView.frame.size.width, 
-                                        self.overlayView.frame.size.height - self.ratioView.frame.origin.y - self.ratioView.frame.size.height));
+                                        self.overlayView.frame.size.height));
     maskLayer.path = path;
 
     self.overlayView.layer.mask = maskLayer;

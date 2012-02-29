@@ -35,10 +35,11 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {   
-//        simpleImageEditorView = [[AGSimpleImageEditorView alloc] initWithImage:[UIImage imageNamed:@"springboard.jpg"]];
-        simpleImageEditorView = [[AGSimpleImageEditorView alloc] initWithImage:[UIImage imageNamed:@"panorama.jpg"]];
+        simpleImageEditorView = [[AGSimpleImageEditorView alloc] initWithImage:[UIImage imageNamed:@"springboard.jpg"]];
+//        simpleImageEditorView = [[AGSimpleImageEditorView alloc] initWithImage:[UIImage imageNamed:@"panorama.jpg"]];
         simpleImageEditorView.borderWidth = 1.f;
         simpleImageEditorView.borderColor = [UIColor darkGrayColor];
+        simpleImageEditorView.ratioViewBorderWidth = 3.f;
         
         ratioSegmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"None", @"3:2", @"4:3", nil]];
         [ratioSegmentedControl addTarget:self action:@selector(didChangeRatio:) forControlEvents:UIControlEventValueChanged];

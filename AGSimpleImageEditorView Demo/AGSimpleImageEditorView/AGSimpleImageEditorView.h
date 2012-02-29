@@ -36,6 +36,7 @@
     UIImageView *imageView;
     UIView *overlayView;
     UIView *ratioView;
+    UIView *ratioControlsView;
     
     CGFloat ratio;
     UIColor *ratioViewBorderColor;
