@@ -37,7 +37,9 @@
 - (void)redisplayImage;
 - (void)displayImage:(id)instance;
 - (void)overlayClipping;
-- (void)rotateImageForImageView:(UIImageView *)imageView withDuration:(NSTimeInterval)duration andDegrees:(CGFloat)degrees;
+- (void)repositionRatioControls;
+- (void)rotateImageForImageView:(UIImageView *)theImageView withDuration:(NSTimeInterval)duration andRotation:(NSInteger)rotation;
+- (void)repositionImageView;
 
 //
 //  Ratio
@@ -48,6 +50,7 @@
 //
 //  Calculations
 //
+- (CGRect)imageFrameFromImageViewWithAspectFitMode:(UIImageView *)theImageView;
 - (CGRect)centerForImage:(UIImage *)image inRect:(CGRect)rect scaleIfNeeded:(BOOL)scaleIfNeeded;
 - (CGRect)rectForRatio:(CGFloat)ratio;
 
@@ -57,7 +60,7 @@
 
 #pragma mark - Properties
 
-@synthesize imageView, overlayView, ratioView, asset, image, ratio, ratioControlsHidden, ratioViewBorderColor, ratioViewBorderWidth, borderColor, borderWidth, rotationDegree;
+@synthesize imageView, overlayView, ratioView, asset, image, ratio, ratioControlsHidden, ratioViewBorderColor, ratioViewBorderWidth, borderColor, borderWidth, rotation, animationDuration;
 
 - (void)setAsset:(ALAsset *)theAsset
 {
@@ -144,15 +147,15 @@
     [self redisplayImage];
 }
 
-- (void)setRotationDegree:(CGFloat)theRotationDegree
+- (void)setRotation:(NSInteger)theRotation
 {
-    rotationDegree = theRotationDegree;
-    if (rotationDegree > 360.f)
-        rotationDegree = theRotationDegree - 360;
-    else if (rotationDegree < -360.f)
-        rotationDegree = 360 - abs(theRotationDegree);
+    rotation = theRotation;
+    if (rotation < -4)
+        rotation = 4 - abs(rotation);
+    if (rotation > 4)
+        rotation = rotation - 4;
     
-    [self rotateImageForImageView:self.imageView withDuration:1.f andDegrees:rotationDegree];
+    [self rotateImageForImageView:self.imageView withDuration:self.animationDuration andRotation:rotation];
 }
 
 #pragma mark - Object Lifecycle
@@ -177,6 +180,11 @@
     self = [super initWithFrame:frame];
     if (self)
     {
+        // Don't display outside this box
+        self.clipsToBounds = YES;
+        self.animationDuration = 0.5f;
+        self.autoresizesSubviews = YES;
+        
         displayedInstance = nil;
         ratio = 0;
         self.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"transparencyPattern"]];
@@ -186,6 +194,9 @@
         imageView.userInteractionEnabled = NO;
         imageView.layer.anchorPoint = CGPointMake(0.5f, 0.5f);
         imageView.contentMode = UIViewContentModeScaleAspectFit;
+        imageView.autoresizesSubviews = YES;
+        imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        [self addSubview:imageView];
         
         // Overlay
         overlayView = [[UIView alloc] initWithFrame:imageView.frame];
@@ -193,14 +204,14 @@
         overlayView.hidden = YES;
         overlayView.backgroundColor = [UIColor blackColor];
         overlayView.userInteractionEnabled = NO;
-        [imageView addSubview:overlayView];
+        overlayView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        [self addSubview:overlayView];
         
         // Ratio view
         ratioView = [[UIView alloc] initWithFrame:[self rectForRatio:self.ratio]];
         ratioView.hidden = YES;
-        [imageView addSubview:ratioView];
-        
-        [self addSubview:imageView];
+        ratioView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        [self addSubview:ratioView];
         
         self.asset = theAsset;
         self.image = theImage;
@@ -241,16 +252,9 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-}
-
-- (void)drawRect:(CGRect)rect
-{
-    CGRect frame = CGRectMake(
-                              self.borderWidth, 
-                              self.borderWidth, 
-                              self.frame.size.width - (self.borderWidth * 2), 
-                              self.frame.size.height - (self.borderWidth * 2));
-    self.imageView.frame = frame;
+    
+    // Reposition ratio controls
+    [self repositionRatioControls];
 }
 
 #pragma mark - Image
@@ -278,10 +282,36 @@
     displayedInstance = instance;
     
     [self.imageView setImage:[self imageFromInstance:instance]];
-//    [self.imageView setFrame:[self centerForImage:self.imageView.image inRect:frame scaleIfNeeded:YES]];
-    
-    [self.overlayView setFrame:CGRectMake(0, 0, self.imageView.frame.size.width, self.imageView.frame.size.height)];
-    [self.ratioView setFrame:CGRectMake(0, 0, self.imageView.frame.size.width, self.imageView.frame.size.height)];
+    // Reposition the image view
+    [self repositionImageView];
+
+    // Reposition ratio controls
+    [self repositionRatioControls];
+}
+
+- (void)repositionImageView
+{
+    [self.imageView setFrame:CGRectMake(
+                                    borderWidth, 
+                                    borderWidth, 
+                                    self.frame.size.width - (borderWidth * 2), 
+                                    self.frame.size.height - (borderWidth * 2))];
+}
+
+- (void)repositionRatioControls
+{
+    CGRect imageFrame = [self imageFrameFromImageViewWithAspectFitMode:self.imageView];
+    CGRect positionFrame = CGRectMake(
+                                      self.imageView.frame.origin.x + imageFrame.origin.x, 
+                                      self.imageView.frame.origin.y + imageFrame.origin.y, 
+                                      imageFrame.size.width, 
+                                      imageFrame.size.height);
+
+    [self.overlayView setFrame:positionFrame];
+    [self.ratioView setFrame:positionFrame];
+
+    // Reset overlay clipping
+    [self overlayClipping];
 }
 
 - (void)overlayClipping
@@ -316,21 +346,25 @@
     [maskLayer release];
 }
 
-- (void)rotateImageForImageView:(UIImageView *)theImageView withDuration:(NSTimeInterval)duration andDegrees:(CGFloat)degrees
+- (void)rotateImageForImageView:(UIImageView *)theImageView withDuration:(NSTimeInterval)duration andRotation:(NSInteger)theRotation
 {
-    [UIView animateWithDuration:duration animations:^{
-        theImageView.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(degrees));
+    [UIView animateWithDuration:duration animations:^{        
+        CGAffineTransform rotationTransform = CGAffineTransformMakeRotation(theRotation * M_PI / 2);
+        self.imageView.transform = rotationTransform;
+        
+        // Reposition the image view
+        [self repositionImageView];
     }];
 }
 
 - (void)rotateLeft
 {
-    self.rotationDegree = self.rotationDegree - 90.f;
+    self.rotation = self.rotation - 1;
 }
 
 - (void)rotateRight
 {
-    self.rotationDegree = self.rotationDegree + 90.f;
+    self.rotation = self.rotation + 1;
 }
 
 #pragma mark - Calculations
@@ -351,7 +385,7 @@
             } else
             {
                 height = theRect.size.height;
-                width = imageSize.width / imageSize.height * height;
+                width = imageSize.width * height / imageSize.height;
             }
         }
     }
@@ -368,6 +402,27 @@
     CGFloat height = self.imageView.frame.size.height, width = height / theRatio;
     
     return CGRectMake(x, y, width, height);
+}
+
+- (CGRect)imageFrameFromImageViewWithAspectFitMode:(UIImageView *)theImageView
+{
+    float imageRatio = theImageView.image.size.width / theImageView.image.size.height;
+    float viewRatio = theImageView.frame.size.width / theImageView.frame.size.height;
+    
+    if (imageRatio < viewRatio)
+    {
+        float scale = theImageView.frame.size.height / theImageView.image.size.height; 
+        float width = scale * theImageView.image.size.width;
+        float topLeftX = (theImageView.frame.size.width - width) * 0.5;
+        return CGRectMake(topLeftX, 0, width, theImageView.frame.size.height);
+    }
+    else
+    {
+        float scale = theImageView.frame.size.width / theImageView.image.size.width;
+        float height = scale * theImageView.image.size.height;
+        float topLeftY = (theImageView.frame.size.height - height) * 0.5;
+        return CGRectMake(0, topLeftY, theImageView.frame.size.width, height);
+    }
 }
 
 @end

@@ -43,7 +43,8 @@
     UIColor *borderColor;
     CGFloat borderWidth;
     
-    CGFloat rotationDegree;
+    NSInteger rotation;
+    NSTimeInterval animationDuration;
 }
 
 @property (nonatomic, copy) ALAsset *asset;
@@ -53,7 +54,8 @@
 @property (nonatomic, assign) CGFloat ratioViewBorderWidth;
 @property (nonatomic, retain) UIColor *borderColor;
 @property (nonatomic, assign) CGFloat borderWidth;
-@property (nonatomic, assign) CGFloat rotationDegree;
+@property (nonatomic, assign) NSInteger rotation;
+@property (nonatomic, assign) NSTimeInterval animationDuration;
 
 - (id)initWithAsset:(ALAsset *)theAsset;
 - (id)initWithImage:(UIImage *)theImage;
