@@ -4,22 +4,16 @@
 //
 //  Created by Artur Grigor on 28.02.2012.
 //  Copyright (c) 2012 Artur Grigor. All rights reserved.
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
 //  
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
+//  For the full copyright and license information, please view the LICENSE
+//  file that was distributed with this source code.
 //  
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-//
 
 #import "AGSimpleImageEditorView.h"
+
+CGSize CGSizeAbsolute(CGSize size) {
+    return (CGSize){fabs(size.width), fabs(size.height)};
+}
 
 @interface AGSimpleImageEditorView ()
 
@@ -30,6 +24,13 @@
 
 - (id)initWithAsset:(ALAsset *)theAsset image:(UIImage *)theImage andFrame:(CGRect)frame;
 - (id)initWithAsset:(ALAsset *)theAsset andImage:(UIImage *)theImage;
+
+//
+//  Output
+//
+- (CGSize)sizeForRotatedImage:(UIImage *)imageToRotate;
+- (UIImage *)rotatedImage:(UIImage *)imageToRotate;
+- (UIImage *)croppedImage:(UIImage *)imageToCrop;
 
 //
 //  Image
@@ -156,6 +157,14 @@
         rotation = rotation - 4;
     
     [self rotateImageForImageView:self.imageView withDuration:self.animationDuration andRotation:rotation];
+}
+
+- (UIImage *)output
+{    
+    UIImage *rotatedImage = [self rotatedImage:self.imageView.image];
+    UIImage *croppedImage = [self croppedImage:rotatedImage];
+
+    return croppedImage;
 }
 
 #pragma mark - Object Lifecycle
@@ -288,6 +297,7 @@
     displayedInstance = instance;
     
     [self.imageView setImage:[self imageFromInstance:instance]];
+    
     // Reposition the image view
     [self repositionImageView];
 
@@ -319,6 +329,7 @@
 
     [self.ratioView setFrame:frame];
     [self.ratioControlsView setFrame:actualImageRect];
+    [self.overlayView setFrame:ratioControlsView.bounds];
 
     // Reset overlay clipping
     [self overlayClipping];
@@ -349,7 +360,7 @@
     CGPathAddRect(path, nil, CGRectMake(0, 
                                         self.ratioView.frame.origin.y + self.ratioView.frame.size.height, 
                                         self.overlayView.frame.size.width, 
-                                        self.overlayView.frame.size.height));
+                                        self.overlayView.frame.size.height - self.ratioView.frame.origin.y + self.ratioView.frame.size.height));
     maskLayer.path = path;
 
     self.overlayView.layer.mask = maskLayer;
@@ -364,6 +375,12 @@
         
         // Reposition the image view
         [self repositionImageView];
+        
+        // Reposition ratio controls
+        [self repositionRatioControls];
+    } completion:^(BOOL finished) {
+        NSData *data = UIImageJPEGRepresentation(self.output, 1);
+        [data writeToFile:@"/Users/arturgrigor/Documents/image.jpg" atomically:YES];
     }];
 }
 
@@ -416,23 +433,74 @@
 
 - (CGRect)imageFrameFromImageViewWithAspectFitMode:(UIImageView *)theImageView
 {
-    float imageRatio = theImageView.image.size.width / theImageView.image.size.height;
-    float viewRatio = theImageView.frame.size.width / theImageView.frame.size.height;
+    CGSize imageSize = CGSizeAbsolute([self sizeForRotatedImage:self.imageView.image]);
+
+    float imageRatio = imageSize.width / imageSize.height;
+    float viewRatio = self.frame.size.width / self.frame.size.height;
     
     if (imageRatio < viewRatio)
     {
-        float scale = theImageView.frame.size.height / theImageView.image.size.height; 
-        float width = scale * theImageView.image.size.width;
-        float topLeftX = (theImageView.frame.size.width - width) * 0.5;
-        return CGRectMake(topLeftX, 0, width, theImageView.frame.size.height);
+        float scale = self.frame.size.height / imageSize.height; 
+        float width = scale * imageSize.width;
+        float topLeftX = .5 * (self.frame.size.width - width);
+        return CGRectMake(topLeftX, 0, width, self.frame.size.height);
     }
     else
     {
-        float scale = theImageView.frame.size.width / theImageView.image.size.width;
-        float height = scale * theImageView.image.size.height;
-        float topLeftY = (theImageView.frame.size.height - height) * 0.5;
-        return CGRectMake(0, topLeftY, theImageView.frame.size.width, height);
+        float scale = self.frame.size.width / imageSize.width;
+        float height = scale * imageSize.height;
+        float topLeftY = .5 * (self.frame.size.height - height);
+        return CGRectMake(0, topLeftY, self.frame.size.width, height);
     }
+}
+
+#pragma mark - Output
+
+- (CGSize)sizeForRotatedImage:(UIImage *)imageToRotate
+{
+    CGFloat rotationAngle = self.rotation * M_PI / 2;
+
+    CGSize imageSize = imageToRotate.size;
+    // Image size after the transformation
+    CGSize outputSize = CGSizeApplyAffineTransform(imageSize, CGAffineTransformMakeRotation(rotationAngle));
+
+    return outputSize;
+}
+
+- (UIImage *)rotatedImage:(UIImage *)imageToRotate
+{
+    CGFloat rotationAngle = self.rotation * M_PI / 2;
+
+    CGSize imageSize = imageToRotate.size;
+    // Image size after the transformation
+    CGSize outputSize = [self sizeForRotatedImage:imageToRotate];
+    CGSize absoluteOutputSize = CGSizeAbsolute(outputSize);
+    UIImage *outputImage = nil;
+
+    // Create the bitmap context
+    UIGraphicsBeginImageContext(absoluteOutputSize);
+    CGContextRef imageContextRef = UIGraphicsGetCurrentContext();
+
+    // Set the anchor point to {0.5, 0.5}
+    CGContextTranslateCTM(imageContextRef, .5 * absoluteOutputSize.width, .5 * absoluteOutputSize.height);
+
+    // Apply rotation
+    CGContextRotateCTM(imageContextRef, rotationAngle);
+
+    // Draw the current image
+    CGContextScaleCTM(imageContextRef, 1.0, -1.0);
+    CGContextDrawImage(imageContextRef, (CGRect) {{-(.5 * imageSize.width), -(.5 * imageSize.height)}, imageSize}, [imageToRotate CGImage]);
+
+    outputImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return outputImage;
+}
+
+- (UIImage *)croppedImage:(UIImage *)imageToCrop
+{
+    // Work
+    return imageToCrop;
 }
 
 @end

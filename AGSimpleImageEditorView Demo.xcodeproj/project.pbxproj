@@ -14,7 +14,7 @@
 		FE2C0BEC14FD2335001FAC87 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE2C0BEB14FD2335001FAC87 /* AssetsLibrary.framework */; };
 		FE2C0BF214FD2778001FAC87 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE2C0BF114FD2778001FAC87 /* QuartzCore.framework */; };
 		FE2C0BF514FD28C0001FAC87 /* transparencyPattern.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2C0BF414FD28C0001FAC87 /* transparencyPattern.png */; };
-		FE2C0BF714FD32AB001FAC87 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE2C0BF614FD32AB001FAC87 /* CoreImage.framework */; };
+		FE35F95214FF620E00070845 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = FE35F95114FF620E00070845 /* LICENSE */; };
 		FE7C6EF014FD2213005921A5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE7C6EEF14FD2213005921A5 /* UIKit.framework */; };
 		FE7C6EF214FD2213005921A5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE7C6EF114FD2213005921A5 /* Foundation.framework */; };
 		FE7C6EF414FD2213005921A5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE7C6EF314FD2213005921A5 /* CoreGraphics.framework */; };
@@ -35,7 +35,7 @@
 		FE2C0BEB14FD2335001FAC87 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		FE2C0BF114FD2778001FAC87 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		FE2C0BF414FD28C0001FAC87 /* transparencyPattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = transparencyPattern.png; sourceTree = "<group>"; };
-		FE2C0BF614FD32AB001FAC87 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		FE35F95114FF620E00070845 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		FE7C6EEB14FD2212005921A5 /* AGSimpleImageEditorView Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AGSimpleImageEditorView Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE7C6EEF14FD2213005921A5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		FE7C6EF114FD2213005921A5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -57,7 +57,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FE2C0BF714FD32AB001FAC87 /* CoreImage.framework in Frameworks */,
 				FE2C0BF214FD2778001FAC87 /* QuartzCore.framework in Frameworks */,
 				FE2C0BEC14FD2335001FAC87 /* AssetsLibrary.framework in Frameworks */,
 				FE7C6EF014FD2213005921A5 /* UIKit.framework in Frameworks */,
@@ -75,6 +74,7 @@
 				FE2C0BF314FD28B2001FAC87 /* Resources */,
 				FE2C0BE814FD2268001FAC87 /* AGSimpleImageEditorView.h */,
 				FE2C0BE914FD2268001FAC87 /* AGSimpleImageEditorView.m */,
+				FE35F95114FF620E00070845 /* LICENSE */,
 			);
 			name = AGSimpleImageEditorView;
 			path = "AGSimpleImageEditorView Demo/AGSimpleImageEditorView";
@@ -109,7 +109,6 @@
 		FE7C6EEE14FD2213005921A5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FE2C0BF614FD32AB001FAC87 /* CoreImage.framework */,
 				FE2C0BF114FD2778001FAC87 /* QuartzCore.framework */,
 				FE2C0BEB14FD2335001FAC87 /* AssetsLibrary.framework */,
 				FE7C6EEF14FD2213005921A5 /* UIKit.framework */,
@@ -206,6 +205,7 @@
 				FE2C0BE414FD225F001FAC87 /* panorama.jpg in Resources */,
 				FE2C0BE514FD225F001FAC87 /* springboard.jpg in Resources */,
 				FE2C0BF514FD28C0001FAC87 /* transparencyPattern.png in Resources */,
+				FE35F95214FF620E00070845 /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
