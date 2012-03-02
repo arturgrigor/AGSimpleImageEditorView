@@ -26,6 +26,7 @@
 		FE7C6F0914FD2213005921A5 /* AGViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE7C6F0714FD2213005921A5 /* AGViewController_iPad.xib */; };
 		FE955DD01500E2BE00806BB5 /* AGSimpleImageEditor-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FE955DCF1500E2BE00806BB5 /* AGSimpleImageEditor-icon.png */; };
 		FE955DD21500E2BE00806BB5 /* AGSimpleImageEditor-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FE955DD11500E2BE00806BB5 /* AGSimpleImageEditor-icon@2x.png */; };
+		FE955DD51501081200806BB5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = FE955DD41501081200806BB5 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		FE7C6F0814FD2213005921A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AGViewController_iPad.xib; sourceTree = "<group>"; };
 		FE955DCF1500E2BE00806BB5 /* AGSimpleImageEditor-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "AGSimpleImageEditor-icon.png"; path = "../AGSimpleImageEditor-icon.png"; sourceTree = "<group>"; };
 		FE955DD11500E2BE00806BB5 /* AGSimpleImageEditor-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "AGSimpleImageEditor-icon@2x.png"; path = "../AGSimpleImageEditor-icon@2x.png"; sourceTree = "<group>"; };
+		FE955DD41501081200806BB5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +141,7 @@
 		FE7C6EF614FD2213005921A5 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FE955DD41501081200806BB5 /* README.md */,
 				FE955DD11500E2BE00806BB5 /* AGSimpleImageEditor-icon@2x.png */,
 				FE955DCF1500E2BE00806BB5 /* AGSimpleImageEditor-icon.png */,
 				FE2C0BE014FD225F001FAC87 /* apple.jpg */,
@@ -214,6 +217,7 @@
 				FE35F95214FF620E00070845 /* LICENSE in Resources */,
 				FE955DD01500E2BE00806BB5 /* AGSimpleImageEditor-icon.png in Resources */,
 				FE955DD21500E2BE00806BB5 /* AGSimpleImageEditor-icon@2x.png in Resources */,
+				FE955DD51501081200806BB5 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
