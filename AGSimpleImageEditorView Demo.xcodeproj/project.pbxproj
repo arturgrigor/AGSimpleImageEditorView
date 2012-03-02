@@ -24,6 +24,8 @@
 		FE7C6F0314FD2213005921A5 /* AGViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FE7C6F0214FD2213005921A5 /* AGViewController.m */; };
 		FE7C6F0614FD2213005921A5 /* AGViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE7C6F0414FD2213005921A5 /* AGViewController_iPhone.xib */; };
 		FE7C6F0914FD2213005921A5 /* AGViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = FE7C6F0714FD2213005921A5 /* AGViewController_iPad.xib */; };
+		FE955DD01500E2BE00806BB5 /* AGSimpleImageEditor-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FE955DCF1500E2BE00806BB5 /* AGSimpleImageEditor-icon.png */; };
+		FE955DD21500E2BE00806BB5 /* AGSimpleImageEditor-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FE955DD11500E2BE00806BB5 /* AGSimpleImageEditor-icon@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +52,8 @@
 		FE7C6F0214FD2213005921A5 /* AGViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AGViewController.m; sourceTree = "<group>"; };
 		FE7C6F0514FD2213005921A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AGViewController_iPhone.xib; sourceTree = "<group>"; };
 		FE7C6F0814FD2213005921A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AGViewController_iPad.xib; sourceTree = "<group>"; };
+		FE955DCF1500E2BE00806BB5 /* AGSimpleImageEditor-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "AGSimpleImageEditor-icon.png"; path = "../AGSimpleImageEditor-icon.png"; sourceTree = "<group>"; };
+		FE955DD11500E2BE00806BB5 /* AGSimpleImageEditor-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "AGSimpleImageEditor-icon@2x.png"; path = "../AGSimpleImageEditor-icon@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +139,8 @@
 		FE7C6EF614FD2213005921A5 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				FE955DD11500E2BE00806BB5 /* AGSimpleImageEditor-icon@2x.png */,
+				FE955DCF1500E2BE00806BB5 /* AGSimpleImageEditor-icon.png */,
 				FE2C0BE014FD225F001FAC87 /* apple.jpg */,
 				FE2C0BE114FD225F001FAC87 /* panorama.jpg */,
 				FE2C0BE214FD225F001FAC87 /* springboard.jpg */,
@@ -206,6 +212,8 @@
 				FE2C0BE514FD225F001FAC87 /* springboard.jpg in Resources */,
 				FE2C0BF514FD28C0001FAC87 /* transparencyPattern.png in Resources */,
 				FE35F95214FF620E00070845 /* LICENSE in Resources */,
+				FE955DD01500E2BE00806BB5 /* AGSimpleImageEditor-icon.png in Resources */,
+				FE955DD21500E2BE00806BB5 /* AGSimpleImageEditor-icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

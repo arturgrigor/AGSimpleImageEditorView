@@ -25,6 +25,11 @@ CGSize CGSizeAbsolute(CGSize size) {
 - (id)initWithAsset:(ALAsset *)theAsset image:(UIImage *)theImage andFrame:(CGRect)frame;
 - (id)initWithAsset:(ALAsset *)theAsset andImage:(UIImage *)theImage;
 
+//  
+//  Gestures
+//  
+- (void)panGesture:(UIPanGestureRecognizer *)recognizer;
+
 //
 //  Output
 //
@@ -39,7 +44,7 @@ CGSize CGSizeAbsolute(CGSize size) {
 - (void)redisplayImage;
 - (void)displayImage:(id)instance;
 - (void)overlayClipping;
-- (void)repositionRatioControls;
+- (void)resetRatioControls;
 - (void)rotateImageForImageView:(UIImageView *)theImageView withDuration:(NSTimeInterval)duration andRotation:(NSInteger)rotation;
 - (void)repositionImageView;
 
@@ -93,7 +98,7 @@ CGSize CGSizeAbsolute(CGSize size) {
     if (ratio > 0)
     {
         // Reposition ratio controls
-        [self repositionRatioControls];
+        [self resetRatioControls];
     }
 
     [self showOrHideTheRatioControls];
@@ -171,6 +176,8 @@ CGSize CGSizeAbsolute(CGSize size) {
 
 - (void)dealloc
 {
+    [panGestureRecognizer release];
+    
     [ratioViewBorderColor release];
     [ratioView release];
     [overlayView release];
@@ -190,6 +197,10 @@ CGSize CGSizeAbsolute(CGSize size) {
     self = [super initWithFrame:frame];
     if (self)
     {
+        // Setup gestures
+        panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
+        panGestureRecognizer.minimumNumberOfTouches = 1;
+        
         // Don't display outside this box
         self.clipsToBounds = YES;
         self.animationDuration = 0.5f;
@@ -224,6 +235,7 @@ CGSize CGSizeAbsolute(CGSize size) {
         // Ratio view
         ratioView = [[UIView alloc] initWithFrame:CGRectZero];
         ratioView.autoresizingMask = UIViewAutoresizingNone;
+        [ratioView addGestureRecognizer:panGestureRecognizer];
         [ratioControlsView addSubview:ratioView];
         
         [self addSubview:ratioControlsView];
@@ -269,7 +281,7 @@ CGSize CGSizeAbsolute(CGSize size) {
     [super layoutSubviews];
     
     // Reposition ratio controls
-    [self repositionRatioControls];
+    [self resetRatioControls];
 }
 
 #pragma mark - Image
@@ -302,7 +314,7 @@ CGSize CGSizeAbsolute(CGSize size) {
     [self repositionImageView];
 
     // Reposition ratio controls
-    [self repositionRatioControls];
+    [self resetRatioControls];
 }
 
 - (void)repositionImageView
@@ -314,17 +326,21 @@ CGSize CGSizeAbsolute(CGSize size) {
                                     self.frame.size.height - (borderWidth * 2))];
 }
 
-- (void)repositionRatioControls
+- (void)resetRatioControls
 {
     CGRect actualImageRect = [self imageFrameFromImageViewWithAspectFitMode:self.imageView];
+    CGSize imageSizeAfterRotation = CGSizeAbsolute([self sizeForRotatedImage:self.imageView.image]);
+    
     CGRect frame = CGRectZero;
-    CGFloat imageRatio = self.imageView.image.size.width / self.imageView.image.size.height;
+    CGFloat imageRatio = imageSizeAfterRotation.width / imageSizeAfterRotation.height;
     if (imageRatio > self.ratio) {
         // Width > Height
         frame = CGRectMake(0, 0, self.ratio * actualImageRect.size.height, actualImageRect.size.height);
+        ratioViewMovementType = AGMovementTypeHorizontally;
     } else {
         // Height > Width
         frame = CGRectMake(0, 0, actualImageRect.size.width, actualImageRect.size.width / self.ratio);
+        ratioViewMovementType = AGMovementTypeVertically;
     }
 
     [self.ratioView setFrame:frame];
@@ -365,22 +381,26 @@ CGSize CGSizeAbsolute(CGSize size) {
 
     self.overlayView.layer.mask = maskLayer;
     [maskLayer release];
+    CGPathRelease(path);
 }
 
 - (void)rotateImageForImageView:(UIImageView *)theImageView withDuration:(NSTimeInterval)duration andRotation:(NSInteger)theRotation
 {
+    self.ratioControlsView.alpha = 0;
+    
     [UIView animateWithDuration:duration animations:^{        
         CGAffineTransform rotationTransform = CGAffineTransformMakeRotation(theRotation * M_PI / 2);
         self.imageView.transform = rotationTransform;
         
         // Reposition the image view
         [self repositionImageView];
-        
-        // Reposition ratio controls
-        [self repositionRatioControls];
     } completion:^(BOOL finished) {
-        NSData *data = UIImageJPEGRepresentation(self.output, 1);
-        [data writeToFile:@"/Users/arturgrigor/Documents/image.jpg" atomically:YES];
+        [UIView animateWithDuration:duration animations:^{
+            self.ratioControlsView.alpha = 1.f;
+            
+            // Reposition ratio controls
+            [self resetRatioControls];
+        }];
     }];
 }
 
@@ -489,7 +509,7 @@ CGSize CGSizeAbsolute(CGSize size) {
 
     // Draw the current image
     CGContextScaleCTM(imageContextRef, 1.0, -1.0);
-    CGContextDrawImage(imageContextRef, (CGRect) {{-(.5 * imageSize.width), -(.5 * imageSize.height)}, imageSize}, [imageToRotate CGImage]);
+    CGContextDrawImage(imageContextRef, (CGRect) {{-(.5 * imageSize.width), -(.5 * imageSize.height)}, imageSize}, imageToRotate.CGImage);
 
     outputImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -499,8 +519,71 @@ CGSize CGSizeAbsolute(CGSize size) {
 
 - (UIImage *)croppedImage:(UIImage *)imageToCrop
 {
-    // Work
-    return imageToCrop;
+    CGSize imageSize = imageToCrop.size;
+    CGSize scaledImageSize = [self imageFrameFromImageViewWithAspectFitMode:self.imageView].size;
+    CGFloat widthFactor = scaledImageSize.width / imageSize.width;
+    CGFloat heightFactor = scaledImageSize.height / imageSize.height;
+    
+    CGRect cropRect = self.ratioView.frame;
+    CGRect actualCropRect = CGRectMake(
+                                           floorf(cropRect.origin.x / widthFactor), 
+                                           floorf(cropRect.origin.y / heightFactor), 
+                                           floorf(cropRect.size.width / widthFactor), 
+                                           floorf(cropRect.size.height / heightFactor)
+                                       );
+    UIImage *outputImage = nil;
+    
+    CGImageRef imageRef = CGImageCreateWithImageInRect(imageToCrop.CGImage, actualCropRect);
+    outputImage = [UIImage imageWithCGImage:imageRef];
+    CGImageRelease(imageRef);
+    
+    return outputImage;
+}
+
+#pragma mark - Gestures
+
+- (void)panGesture:(UIPanGestureRecognizer *)recognizer
+{
+    CGPoint translation = [recognizer translationInView:self.ratioView];
+    CGPoint center = CGPointMake(0, 0);
+    
+    if (ratioViewMovementType == AGMovementTypeHorizontally)
+    {
+        // Superview's width minus half of ratio view's width
+        CGFloat maxXCenter = self.ratioControlsView.frame.size.width - (self.ratioView.frame.size.width * .5);
+        // Half of ratio view's width
+        CGFloat minXCenter = (self.ratioView.frame.size.width * .5);
+        CGFloat computedXCenter = recognizer.view.center.x + translation.x;
+        
+        if (computedXCenter < minXCenter) {
+            computedXCenter = minXCenter;
+        } else if (computedXCenter > maxXCenter) {
+            computedXCenter = maxXCenter;
+        }
+        
+        center = CGPointMake(computedXCenter, recognizer.view.center.y);
+    } else if (ratioViewMovementType == AGMovementTypeVertically)
+    {
+        // Superview's height minus half of ratio view's height
+        CGFloat maxYCenter = self.ratioControlsView.frame.size.height - (self.ratioView.frame.size.height * .5);
+        // Half of ratio view's height
+        CGFloat minYCenter = (self.ratioView.frame.size.height * .5);
+        CGFloat computedYCenter = recognizer.view.center.y + translation.y;
+        
+        if (computedYCenter < minYCenter) {
+            computedYCenter = minYCenter;
+        } else if (computedYCenter > maxYCenter) {
+            computedYCenter = maxYCenter;
+        }
+        
+        center = CGPointMake(recognizer.view.center.x, computedYCenter);
+    }
+    
+    [recognizer setTranslation:CGPointMake(0, 0) inView:self.ratioView];
+    [recognizer.view setCenter:center];
+
+    // Reset overlay clipping
+    [self overlayClipping];
 }
 
 @end

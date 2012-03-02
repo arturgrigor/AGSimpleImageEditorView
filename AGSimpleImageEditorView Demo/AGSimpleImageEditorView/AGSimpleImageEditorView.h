@@ -13,6 +13,12 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <QuartzCore/QuartzCore.h>
 
+enum {
+    AGMovementTypeVertically,
+    AGMovementTypeHorizontally
+};
+typedef NSUInteger AGMovementType;
+
 @interface AGSimpleImageEditorView : UIView
 {
     id displayedInstance;
@@ -24,6 +30,7 @@
     UIView *overlayView;
     UIView *ratioView;
     UIView *ratioControlsView;
+    AGMovementType ratioViewMovementType;
     
     CGFloat ratio;
     UIColor *ratioViewBorderColor;
@@ -33,6 +40,8 @@
     
     NSInteger rotation;
     NSTimeInterval animationDuration;
+    
+    UIPanGestureRecognizer *panGestureRecognizer;
 }
 
 @property (nonatomic, copy) ALAsset *asset;

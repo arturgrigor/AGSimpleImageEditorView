@@ -11,6 +11,8 @@
 
 @interface AGViewController ()
 
+- (void)saveImage;
+
 - (void)rotateLeft:(id)sender;
 - (void)rotateRight:(id)sender;
 
@@ -41,7 +43,7 @@
         simpleImageEditorView.borderColor = [UIColor darkGrayColor];
         simpleImageEditorView.ratioViewBorderWidth = 3.f;
         
-        ratioSegmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"None", @"3:2", @"4:3", nil]];
+        ratioSegmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"None", @"4:3", @"3:2", @"16:10", @"18:10", nil]];
         [ratioSegmentedControl addTarget:self action:@selector(didChangeRatio:) forControlEvents:UIControlEventValueChanged];
         
         rotateLeftButton = [[UIButton buttonWithType:UIButtonTypeRoundedRect] retain];
@@ -92,11 +94,19 @@
     CGFloat ratio = 0;
     switch (ratioSegmentedControl.selectedSegmentIndex) {
         case 1:
-            ratio = 3./2.;
+            ratio = 4./3.;
             break;
             
         case 2:
-            ratio = 4./3.;
+            ratio = 3./2.;
+            break;
+            
+        case 3:
+            ratio = 16./10.;
+            break;
+            
+        case 4:
+            ratio = 18./10.;
             break;
     }
     
@@ -134,6 +144,12 @@
 - (void)rotateRight:(id)sender
 {
     [simpleImageEditorView rotateRight];
+}
+
+- (void)saveImage
+{
+    NSData *data = UIImageJPEGRepresentation(simpleImageEditorView.output, 1);
+    [data writeToFile:@"/Users/arturgrigor/Documents/image.jpg" atomically:YES];
 }
 
 @end
