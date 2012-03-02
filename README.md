@@ -23,6 +23,29 @@ simpleImageEditorView = [[AGSimpleImageEditorView alloc] initWithImage:[UIImage 
 [self.view addSubview:simpleImageEditorView];
 ```
 
+#### Rotation
+
+##### Left
+``` objective-c
+[simpleImageEditorView rotateLeft];
+```
+##### Right
+``` objective-c
+[simpleImageEditorView rotateRight];
+```
+
+#### Cropping
+
+``` objective-c
+simpleImageEditorView.ratio = 4./3.;
+```
+
+#### Resulting image
+
+``` objective-c
+UIImage *result = simpleImageEditorView.output;
+```
+
 ## Contact
 
 - [GitHub](http://github.com/arturgrigor)
