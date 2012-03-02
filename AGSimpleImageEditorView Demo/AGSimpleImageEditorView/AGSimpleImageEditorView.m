@@ -526,10 +526,10 @@ CGSize CGSizeAbsolute(CGSize size) {
     
     CGRect cropRect = self.ratioView.frame;
     CGRect actualCropRect = CGRectMake(
-                                           floorf(cropRect.origin.x / widthFactor), 
-                                           floorf(cropRect.origin.y / heightFactor), 
-                                           floorf(cropRect.size.width / widthFactor), 
-                                           floorf(cropRect.size.height / heightFactor)
+                                           roundf(cropRect.origin.x / widthFactor), 
+                                           roundf(cropRect.origin.y / heightFactor), 
+                                           roundf(cropRect.size.width / widthFactor), 
+                                           roundf(cropRect.size.height / heightFactor)
                                        );
     UIImage *outputImage = nil;
     
