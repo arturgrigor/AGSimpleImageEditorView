@@ -45,7 +45,6 @@ CGSize CGSizeAbsolute(CGSize size) {
 - (void)displayImage:(id)instance;
 - (void)overlayClipping;
 - (void)resetRatioControls;
-- (void)rotateImageForImageView:(UIImageView *)theImageView withDuration:(NSTimeInterval)duration andRotation:(NSInteger)rotation;
 - (void)repositionImageView;
 
 //
@@ -86,9 +85,22 @@ CGSize CGSizeAbsolute(CGSize size) {
     {
         [image release];
         image = [theImage retain];
-
+        
         [self displayImage:image];
     }
+}
+
+- (CGRect)cropRect
+{
+    return (self.ratioView.frame);
+}
+
+- (void)setCropRect:(CGRect)theCropRect
+{
+    self.ratioView.frame = theCropRect;
+    
+    // Reset overlay clipping
+    [self overlayClipping];
 }
 
 - (void)setRatio:(CGFloat)theRatio
@@ -100,7 +112,10 @@ CGSize CGSizeAbsolute(CGSize size) {
         // Reposition ratio controls
         [self resetRatioControls];
     }
-
+    
+    // Reset crop rect
+    cropRect = CGRectZero;
+    
     [self showOrHideTheRatioControls];
 }
 
@@ -155,20 +170,65 @@ CGSize CGSizeAbsolute(CGSize size) {
 
 - (void)setRotation:(NSInteger)theRotation
 {
+    [self setRotation:theRotation animated:NO];
+}
+
+- (void)setRotation:(NSInteger)theRotation animated:(BOOL)animated
+{
     rotation = theRotation;
     if (rotation < -4)
         rotation = 4 - abs(rotation);
     if (rotation > 4)
         rotation = rotation - 4;
     
-    [self rotateImageForImageView:self.imageView withDuration:self.animationDuration andRotation:rotation];
+    if (animated)
+    {
+        self.ratioControlsView.alpha = 0;
+        
+        [UIView animateWithDuration:self.animationDuration animations:^{        
+            CGAffineTransform rotationTransform = CGAffineTransformMakeRotation(rotation * M_PI / 2);
+            self.imageView.transform = rotationTransform;
+            
+            // Reposition the image view
+            [self repositionImageView];
+        } completion:^(BOOL finished) {
+            
+            if (finished)
+            {
+                // Notification
+                if (self.didChangeRotationBlock)
+                    self.didChangeRotationBlock(rotation);
+                
+                [UIView animateWithDuration:self.animationDuration animations:^{
+                    self.ratioControlsView.alpha = 1.f;
+                    
+                    // Reposition ratio controls
+                    [self resetRatioControls];
+                }];   
+            }
+        }];
+    } else
+    {
+        CGAffineTransform rotationTransform = CGAffineTransformMakeRotation(rotation * M_PI / 2);
+        self.imageView.transform = rotationTransform;
+        
+        // Reposition the image view
+        [self repositionImageView];
+        
+        // Notification
+        if (self.didChangeRotationBlock)
+            self.didChangeRotationBlock(rotation);
+        
+        // Reposition ratio controls
+        [self resetRatioControls];
+    }
 }
 
 - (UIImage *)output
 {    
     UIImage *rotatedImage = [self rotatedImage:self.imageView.image];
     UIImage *croppedImage = [self croppedImage:rotatedImage];
-
+    
     return croppedImage;
 }
 
@@ -315,7 +375,7 @@ CGSize CGSizeAbsolute(CGSize size) {
     
     // Reposition the image view
     [self repositionImageView];
-
+    
     // Reposition ratio controls
     [self resetRatioControls];
 }
@@ -323,10 +383,10 @@ CGSize CGSizeAbsolute(CGSize size) {
 - (void)repositionImageView
 {
     [self.imageView setFrame:CGRectMake(
-                                    borderWidth, 
-                                    borderWidth, 
-                                    self.frame.size.width - (borderWidth * 2), 
-                                    self.frame.size.height - (borderWidth * 2))];
+                                        borderWidth, 
+                                        borderWidth, 
+                                        self.frame.size.width - (borderWidth * 2), 
+                                        self.frame.size.height - (borderWidth * 2))];
 }
 
 - (void)resetRatioControls
@@ -348,11 +408,11 @@ CGSize CGSizeAbsolute(CGSize size) {
         frame = CGRectMake(0, 0, actualImageRect.size.width, actualImageRect.size.width / self.ratio);
         ratioViewMovementType = AGMovementTypeVertically;
     }
-
+    
     [self.ratioView setFrame:frame];
     [self.ratioControlsView setFrame:actualImageRect];
     [self.overlayView setFrame:ratioControlsView.bounds];
-
+    
     // Reset overlay clipping
     [self overlayClipping];
 }
@@ -361,7 +421,7 @@ CGSize CGSizeAbsolute(CGSize size) {
 {
     CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
     CGMutablePathRef path = CGPathCreateMutable();
-
+    
     // Left side of the ratio view
     CGPathAddRect(path, nil, CGRectMake(0, 
                                         0, 
@@ -384,45 +444,20 @@ CGSize CGSizeAbsolute(CGSize size) {
                                         self.overlayView.frame.size.width, 
                                         self.overlayView.frame.size.height - self.ratioView.frame.origin.y + self.ratioView.frame.size.height));
     maskLayer.path = path;
-
+    
     self.overlayView.layer.mask = maskLayer;
     [maskLayer release];
     CGPathRelease(path);
 }
 
-- (void)rotateImageForImageView:(UIImageView *)theImageView withDuration:(NSTimeInterval)duration andRotation:(NSInteger)theRotation
-{
-    self.ratioControlsView.alpha = 0;
-    
-    [UIView animateWithDuration:duration animations:^{        
-        CGAffineTransform rotationTransform = CGAffineTransformMakeRotation(theRotation * M_PI / 2);
-        self.imageView.transform = rotationTransform;
-        
-        // Reposition the image view
-        [self repositionImageView];
-    } completion:^(BOOL finished) {
-        
-        // Notification
-        if (self.didChangeRotationBlock)
-            self.didChangeRotationBlock(self.rotation);
-        
-        [UIView animateWithDuration:duration animations:^{
-            self.ratioControlsView.alpha = 1.f;
-            
-            // Reposition ratio controls
-            [self resetRatioControls];
-        }];
-    }];
-}
-
 - (void)rotateLeft
 {
-    self.rotation = self.rotation - 1;
+    [self setRotation:self.rotation - 1 animated:YES];
 }
 
 - (void)rotateRight
 {
-    self.rotation = self.rotation + 1;
+    [self setRotation:self.rotation + 1 animated:YES];
 }
 
 #pragma mark - Calculations
@@ -434,7 +469,7 @@ CGSize CGSizeAbsolute(CGSize size) {
     }
     
     CGSize imageSize = CGSizeAbsolute([self sizeForRotatedImage:self.imageView.image]);
-
+    
     float imageRatio = imageSize.width / imageSize.height;
     float viewRatio = self.frame.size.width / self.frame.size.height;
     
@@ -463,41 +498,41 @@ CGSize CGSizeAbsolute(CGSize size) {
     }
     
     CGFloat rotationAngle = self.rotation * M_PI / 2;
-
+    
     CGSize imageSize = imageToRotate.size;
     // Image size after the transformation
     CGSize outputSize = CGSizeApplyAffineTransform(imageSize, CGAffineTransformMakeRotation(rotationAngle));
-
+    
     return outputSize;
 }
 
 - (UIImage *)rotatedImage:(UIImage *)imageToRotate
 {
     CGFloat rotationAngle = self.rotation * M_PI / 2;
-
+    
     CGSize imageSize = imageToRotate.size;
     // Image size after the transformation
     CGSize outputSize = [self sizeForRotatedImage:imageToRotate];
     CGSize absoluteOutputSize = CGSizeAbsolute(outputSize);
     UIImage *outputImage = nil;
-
+    
     // Create the bitmap context
     UIGraphicsBeginImageContext(absoluteOutputSize);
     CGContextRef imageContextRef = UIGraphicsGetCurrentContext();
-
+    
     // Set the anchor point to {0.5, 0.5}
     CGContextTranslateCTM(imageContextRef, .5 * absoluteOutputSize.width, .5 * absoluteOutputSize.height);
-
+    
     // Apply rotation
     CGContextRotateCTM(imageContextRef, rotationAngle);
-
+    
     // Draw the current image
     CGContextScaleCTM(imageContextRef, 1.0, -1.0);
     CGContextDrawImage(imageContextRef, (CGRect) {{-(.5 * imageSize.width), -(.5 * imageSize.height)}, imageSize}, imageToRotate.CGImage);
-
+    
     outputImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-
+    
     return outputImage;
 }
 
@@ -508,12 +543,12 @@ CGSize CGSizeAbsolute(CGSize size) {
     CGFloat widthFactor = scaledImageSize.width / imageSize.width;
     CGFloat heightFactor = scaledImageSize.height / imageSize.height;
     
-    CGRect cropRect = self.ratioView.frame;
+    CGRect currentCropRect = self.ratioView.frame;
     CGRect actualCropRect = CGRectMake(
-                                           roundf(cropRect.origin.x / widthFactor), 
-                                           roundf(cropRect.origin.y / heightFactor), 
-                                           roundf(cropRect.size.width / widthFactor), 
-                                           roundf(cropRect.size.height / heightFactor)
+                                       roundf(currentCropRect.origin.x / widthFactor), 
+                                       roundf(currentCropRect.origin.y / heightFactor), 
+                                       roundf(currentCropRect.size.width / widthFactor), 
+                                       roundf(currentCropRect.size.height / heightFactor)
                                        );
     UIImage *outputImage = nil;
     
@@ -569,7 +604,7 @@ CGSize CGSizeAbsolute(CGSize size) {
     // Notification
     if (self.didChangeCropRectBlock)
         self.didChangeCropRectBlock(self.ratioView.frame);
-
+    
     // Reset overlay clipping
     [self overlayClipping];
 }

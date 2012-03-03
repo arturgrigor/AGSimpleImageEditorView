@@ -44,6 +44,8 @@ typedef void (^AGSIEVDidChangeRotationBlock)(NSInteger rotation);
     NSInteger rotation;
     NSTimeInterval animationDuration;
     
+    CGRect cropRect;
+    
     UIPanGestureRecognizer *panGestureRecognizer;
     
     AGSIEVDidChangeCropRectBlock didChangeCropRectBlock;
@@ -52,6 +54,7 @@ typedef void (^AGSIEVDidChangeRotationBlock)(NSInteger rotation);
 
 @property (nonatomic, copy) ALAsset *asset;
 @property (nonatomic, copy) UIImage *image;
+@property (nonatomic, assign) CGRect cropRect;
 @property (nonatomic, assign) CGFloat ratio;
 @property (nonatomic, retain) UIColor *ratioViewBorderColor;
 @property (nonatomic, assign) CGFloat ratioViewBorderWidth;
@@ -63,6 +66,8 @@ typedef void (^AGSIEVDidChangeRotationBlock)(NSInteger rotation);
 
 @property (nonatomic, copy) AGSIEVDidChangeCropRectBlock didChangeCropRectBlock;
 @property (nonatomic, copy) AGSIEVDidChangeRotationBlock didChangeRotationBlock;
+
+- (void)setRotation:(NSInteger)rotation animated:(BOOL)animated;
 
 - (id)initWithAsset:(ALAsset *)theAsset;
 - (id)initWithImage:(UIImage *)theImage;
