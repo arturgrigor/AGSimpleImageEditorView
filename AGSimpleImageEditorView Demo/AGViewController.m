@@ -39,6 +39,8 @@
     {   
 //        simpleImageEditorView = [[AGSimpleImageEditorView alloc] initWithImage:[UIImage imageNamed:@"springboard.jpg"]];
         simpleImageEditorView = [[AGSimpleImageEditorView alloc] initWithImage:[UIImage imageNamed:@"apple.jpg"]];
+//        simpleImageEditorView = [[AGSimpleImageEditorView alloc] init];
+//        simpleImageEditorView.image = [UIImage imageNamed:@"apple.jpg"];
         simpleImageEditorView.borderWidth = 1.f;
         simpleImageEditorView.borderColor = [UIColor darkGrayColor];
         simpleImageEditorView.ratioViewBorderWidth = 3.f;

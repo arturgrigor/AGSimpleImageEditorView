@@ -313,6 +313,7 @@
 		FE7C6F0D14FD2213005921A5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AGSimpleImageEditorView Demo/AGSimpleImageEditorView Demo-Prefix.pch";
 				INFOPLIST_FILE = "AGSimpleImageEditorView Demo/AGSimpleImageEditorView Demo-Info.plist";
@@ -325,6 +326,7 @@
 		FE7C6F0E14FD2213005921A5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AGSimpleImageEditorView Demo/AGSimpleImageEditorView Demo-Prefix.pch";
 				INFOPLIST_FILE = "AGSimpleImageEditorView Demo/AGSimpleImageEditorView Demo-Info.plist";

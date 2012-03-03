@@ -58,8 +58,6 @@ CGSize CGSizeAbsolute(CGSize size) {
 //  Calculations
 //
 - (CGRect)imageFrameFromImageViewWithAspectFitMode:(UIImageView *)theImageView;
-- (CGRect)centerForImage:(UIImage *)image inRect:(CGRect)rect scaleIfNeeded:(BOOL)scaleIfNeeded;
-- (CGRect)rectForRatio:(CGFloat)ratio;
 
 @end
 
@@ -331,6 +329,9 @@ CGSize CGSizeAbsolute(CGSize size) {
     CGRect actualImageRect = [self imageFrameFromImageViewWithAspectFitMode:self.imageView];
     CGSize imageSizeAfterRotation = CGSizeAbsolute([self sizeForRotatedImage:self.imageView.image]);
     
+    if (CGRectEqualToRect(actualImageRect, CGRectZero))
+        return;
+    
     CGRect frame = CGRectZero;
     CGFloat imageRatio = imageSizeAfterRotation.width / imageSizeAfterRotation.height;
     if (imageRatio > self.ratio) {
@@ -416,43 +417,12 @@ CGSize CGSizeAbsolute(CGSize size) {
 
 #pragma mark - Calculations
 
-- (CGRect)centerForImage:(UIImage *)theImage inRect:(CGRect)theRect scaleIfNeeded:(BOOL)scaleIfNeeded
-{
-    CGSize imageSize = [theImage size];
-    CGFloat x = 0, y = 0, width = imageSize.width, height = imageSize.height;
-
-    if (scaleIfNeeded)
-    {
-        if (width > theRect.size.width || height > theRect.size.height)
-        {
-            if (width > height)
-            {
-                width = theRect.size.width;
-                height = imageSize.height / imageSize.width * width;                
-            } else
-            {
-                height = theRect.size.height;
-                width = imageSize.width * height / imageSize.height;
-            }
-        }
-    }
-
-    x = (theRect.size.width - width) / 2;
-    y = (theRect.size.height - height) / 2;
-
-    return CGRectMake(theRect.origin.x + round(x), theRect.origin.y + round(y), round(width), round(height));
-}
-
-- (CGRect)rectForRatio:(CGFloat)theRatio
-{
-    CGFloat x = self.ratioView.frame.origin.x, y = self.ratioView.frame.origin.y;
-    CGFloat height = self.imageView.frame.size.height, width = height / theRatio;
-    
-    return CGRectMake(x, y, width, height);
-}
-
 - (CGRect)imageFrameFromImageViewWithAspectFitMode:(UIImageView *)theImageView
 {
+    if (theImageView.image == nil) {
+        return CGRectMake(0, 0, 0, 0);
+    }
+    
     CGSize imageSize = CGSizeAbsolute([self sizeForRotatedImage:self.imageView.image]);
 
     float imageRatio = imageSize.width / imageSize.height;
@@ -478,6 +448,10 @@ CGSize CGSizeAbsolute(CGSize size) {
 
 - (CGSize)sizeForRotatedImage:(UIImage *)imageToRotate
 {
+    if (imageToRotate == nil) {
+        return CGSizeMake(0, 0);
+    }
+    
     CGFloat rotationAngle = self.rotation * M_PI / 2;
 
     CGSize imageSize = imageToRotate.size;
