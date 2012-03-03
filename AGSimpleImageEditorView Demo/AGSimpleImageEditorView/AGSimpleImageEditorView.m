@@ -67,6 +67,8 @@ CGSize CGSizeAbsolute(CGSize size) {
 
 @synthesize imageView, overlayView, ratioView, ratioControlsView, asset, image, ratio, ratioControlsHidden, ratioViewBorderColor, ratioViewBorderWidth, borderColor, borderWidth, rotation, animationDuration;
 
+@synthesize didChangeCropRectBlock, didChangeRotationBlock;
+
 - (void)setAsset:(ALAsset *)theAsset
 {
     if (asset != theAsset)
@@ -184,6 +186,9 @@ CGSize CGSizeAbsolute(CGSize size) {
     
     [asset release];
     [image release];
+    
+    [didChangeCropRectBlock release];
+    [didChangeRotationBlock release];
     
     [super dealloc];
 }
@@ -396,6 +401,11 @@ CGSize CGSizeAbsolute(CGSize size) {
         // Reposition the image view
         [self repositionImageView];
     } completion:^(BOOL finished) {
+        
+        // Notification
+        if (self.didChangeRotationBlock)
+            self.didChangeRotationBlock(self.rotation);
+        
         [UIView animateWithDuration:duration animations:^{
             self.ratioControlsView.alpha = 1.f;
             
@@ -555,6 +565,10 @@ CGSize CGSizeAbsolute(CGSize size) {
     
     [recognizer setTranslation:CGPointMake(0, 0) inView:self.ratioView];
     [recognizer.view setCenter:center];
+    
+    // Notification
+    if (self.didChangeCropRectBlock)
+        self.didChangeCropRectBlock(self.ratioView.frame);
 
     // Reset overlay clipping
     [self overlayClipping];

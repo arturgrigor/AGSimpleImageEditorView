@@ -19,6 +19,9 @@ enum {
 };
 typedef NSUInteger AGMovementType;
 
+typedef void (^AGSIEVDidChangeCropRectBlock)(CGRect cropRect);
+typedef void (^AGSIEVDidChangeRotationBlock)(NSInteger rotation);
+
 @interface AGSimpleImageEditorView : UIView
 {
     id displayedInstance;
@@ -42,6 +45,9 @@ typedef NSUInteger AGMovementType;
     NSTimeInterval animationDuration;
     
     UIPanGestureRecognizer *panGestureRecognizer;
+    
+    AGSIEVDidChangeCropRectBlock didChangeCropRectBlock;
+    AGSIEVDidChangeRotationBlock didChangeRotationBlock;
 }
 
 @property (nonatomic, copy) ALAsset *asset;
@@ -54,6 +60,9 @@ typedef NSUInteger AGMovementType;
 @property (nonatomic, assign) NSInteger rotation;
 @property (nonatomic, assign) NSTimeInterval animationDuration;
 @property (nonatomic, readonly) UIImage *output;
+
+@property (nonatomic, copy) AGSIEVDidChangeCropRectBlock didChangeCropRectBlock;
+@property (nonatomic, copy) AGSIEVDidChangeRotationBlock didChangeRotationBlock;
 
 - (id)initWithAsset:(ALAsset *)theAsset;
 - (id)initWithImage:(UIImage *)theImage;
