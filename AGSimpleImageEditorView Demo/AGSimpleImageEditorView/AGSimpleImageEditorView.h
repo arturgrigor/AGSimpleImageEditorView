@@ -22,7 +22,7 @@ typedef NSUInteger AGMovementType;
 typedef void (^AGSIEVDidChangeCropRectBlock)(CGRect cropRect);
 typedef void (^AGSIEVDidChangeRotationBlock)(NSInteger rotation);
 
-@interface AGSimpleImageEditorView : UIView
+@interface AGSimpleImageEditorView : UIView<NSCoding>
 {
     id displayedInstance;
     

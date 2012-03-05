@@ -11,6 +11,17 @@
 
 #import "AGSimpleImageEditorView.h"
 
+#define kCodingKeyAsset                         @"asset"
+#define kCodingKeyImage                         @"image"
+#define kCodingKeyRatio                         @"ratio"
+#define kCodingKeyRatioViewBorderColor          @"ratioViewBorderColor"
+#define kCodingKeyRatioViewBorderWidth          @"ratioViewBorderWidth"
+#define kCodingKeyBorderColor                   @"borderColor"
+#define kCodingKeyBorderWidth                   @"borderWidth"
+#define kCodingKeyRotation                      @"rotation"
+#define kCodingKeyAnimationDuration             @"animationDuration"
+#define kCodingKeyCropRect                      @"cropRect"
+
 CGSize CGSizeAbsolute(CGSize size) {
     return (CGSize){fabs(size.width), fabs(size.height)};
 }
@@ -21,6 +32,8 @@ CGSize CGSizeAbsolute(CGSize size) {
 @property (nonatomic, retain) UIView *overlayView;
 @property (nonatomic, retain) UIView *ratioView;
 @property (nonatomic, retain) UIView *ratioControlsView;
+
+- (void)initialize;
 
 - (id)initWithAsset:(ALAsset *)theAsset image:(UIImage *)theImage andFrame:(CGRect)frame;
 - (id)initWithAsset:(ALAsset *)theAsset andImage:(UIImage *)theImage;
@@ -111,6 +124,10 @@ CGSize CGSizeAbsolute(CGSize size) {
     {
         // Reposition ratio controls
         [self resetRatioControls];
+        
+        // Notification
+        if (self.didChangeCropRectBlock)
+            self.didChangeCropRectBlock(self.ratioView.frame);
     }
     
     // Reset crop rect
@@ -199,11 +216,11 @@ CGSize CGSizeAbsolute(CGSize size) {
                 if (self.didChangeRotationBlock)
                     self.didChangeRotationBlock(rotation);
                 
+                // Reposition ratio controls
+                [self resetRatioControls];
+                
                 [UIView animateWithDuration:self.animationDuration animations:^{
                     self.ratioControlsView.alpha = 1.f;
-                    
-                    // Reposition ratio controls
-                    [self resetRatioControls];
                 }];   
             }
         }];
@@ -255,61 +272,68 @@ CGSize CGSizeAbsolute(CGSize size) {
 
 #pragma mark - Designated Initializer
 
+- (void)initialize
+{
+    // Setup gestures
+    panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
+    panGestureRecognizer.minimumNumberOfTouches = 1;
+    
+    animationDuration = 0.5f;
+    displayedInstance = nil;
+    ratio = 0;
+    
+    // Creating the image view
+    imageView = [[UIImageView alloc] initWithFrame:self.frame];
+    imageView.userInteractionEnabled = NO;
+    imageView.layer.anchorPoint = CGPointMake(0.5f, 0.5f);
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    imageView.autoresizesSubviews = YES;
+    imageView.autoresizingMask = 
+    UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    [self addSubview:imageView];
+    
+    // Ratio Controls View
+    ratioControlsView = [[UIView alloc] initWithFrame:imageView.frame];
+    ratioControlsView.hidden = YES;
+    ratioControlsView.autoresizesSubviews = YES;
+    
+    // Overlay
+    overlayView = [[UIView alloc] initWithFrame:CGRectZero];
+    overlayView.alpha = .5;
+    overlayView.backgroundColor = [UIColor blackColor];
+    overlayView.userInteractionEnabled = NO;
+    overlayView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    [ratioControlsView addSubview:overlayView];
+    
+    // Ratio view
+    ratioView = [[UIView alloc] initWithFrame:CGRectZero];
+    ratioView.autoresizingMask = UIViewAutoresizingNone;
+    [ratioView addGestureRecognizer:panGestureRecognizer];
+    [ratioControlsView addSubview:ratioView];
+    
+    [self addSubview:ratioControlsView];
+    
+    self.ratioViewBorderColor = [UIColor redColor];
+    self.ratioViewBorderWidth = 1.f;
+    
+    [self showOrHideTheRatioControls];
+}
+
 - (id)initWithAsset:(ALAsset *)theAsset image:(UIImage *)theImage andFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self)
     {
-        // Setup gestures
-        panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
-        panGestureRecognizer.minimumNumberOfTouches = 1;
-        
         // Don't display outside this box
         self.clipsToBounds = YES;
-        self.animationDuration = 0.5f;
         self.autoresizesSubviews = YES;
         
-        displayedInstance = nil;
-        ratio = 0;
         self.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"transparencyPattern"]];
         
-        // Creating the image view
-        imageView = [[UIImageView alloc] initWithFrame:self.frame];
-        imageView.userInteractionEnabled = NO;
-        imageView.layer.anchorPoint = CGPointMake(0.5f, 0.5f);
-        imageView.contentMode = UIViewContentModeScaleAspectFit;
-        imageView.autoresizesSubviews = YES;
-        imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        [self addSubview:imageView];
-        
-        // Ratio Controls View
-        ratioControlsView = [[UIView alloc] initWithFrame:imageView.frame];
-        ratioControlsView.hidden = YES;
-        ratioControlsView.autoresizesSubviews = YES;
-        
-        // Overlay
-        overlayView = [[UIView alloc] initWithFrame:CGRectZero];
-        overlayView.alpha = .5;
-        overlayView.backgroundColor = [UIColor blackColor];
-        overlayView.userInteractionEnabled = NO;
-        overlayView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        [ratioControlsView addSubview:overlayView];
-        
-        // Ratio view
-        ratioView = [[UIView alloc] initWithFrame:CGRectZero];
-        ratioView.autoresizingMask = UIViewAutoresizingNone;
-        [ratioView addGestureRecognizer:panGestureRecognizer];
-        [ratioControlsView addSubview:ratioView];
-        
-        [self addSubview:ratioControlsView];
+        [self initialize];
         
         self.asset = theAsset;
         self.image = theImage;
-        
-        self.ratioViewBorderColor = [UIColor redColor];
-        self.ratioViewBorderWidth = 1.f;
-        
-        [self showOrHideTheRatioControls];
     }
     
     return self;
@@ -337,17 +361,70 @@ CGSize CGSizeAbsolute(CGSize size) {
     return [self initWithAsset:nil image:nil andFrame:frame];
 }
 
-#pragma mark - View
+#pragma mark - Coding
 
-- (void)layoutSubviews
+- (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [super layoutSubviews];
+    [super encodeWithCoder:aCoder];
     
-    // Reposition ratio controls
-    [self resetRatioControls];
+    [aCoder encodeObject:self.asset forKey:kCodingKeyAsset];
+    [aCoder encodeObject:self.image forKey:kCodingKeyImage];
+    
+    [aCoder encodeObject:self.borderColor forKey:kCodingKeyBorderColor];
+    [aCoder encodeFloat:self.borderWidth forKey:kCodingKeyBorderWidth];
+    
+    [aCoder encodeObject:self.ratioViewBorderColor forKey:kCodingKeyRatioViewBorderColor];
+    [aCoder encodeFloat:self.ratioViewBorderWidth forKey:kCodingKeyRatioViewBorderWidth];
+    [aCoder encodeFloat:self.ratio forKey:kCodingKeyRatio];
+    
+    [aCoder encodeInteger:self.rotation forKey:kCodingKeyRotation];
+    [aCoder encodeDouble:self.animationDuration forKey:kCodingKeyAnimationDuration];
+    
+    [aCoder encodeCGRect:self.ratioView.frame forKey:kCodingKeyCropRect];
 }
 
-#pragma mark - Image
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    
+    // Remove the encoded subviews
+    for (UIView *view in self.subviews) {
+        [view removeFromSuperview];
+    }
+    
+    [self initialize];
+    
+    self.asset = [aDecoder decodeObjectForKey:kCodingKeyAsset];
+    self.image = [aDecoder decodeObjectForKey:kCodingKeyImage];
+    
+    self.borderColor = [aDecoder decodeObjectForKey:kCodingKeyBorderColor];
+    self.borderWidth = [aDecoder decodeFloatForKey:kCodingKeyBorderWidth];
+    
+    self.ratioViewBorderColor = [aDecoder decodeObjectForKey:kCodingKeyRatioViewBorderColor];
+    self.ratioViewBorderWidth = [aDecoder decodeFloatForKey:kCodingKeyRatioViewBorderWidth];
+    self.ratio = [aDecoder decodeFloatForKey:kCodingKeyRatio];
+    
+    self.rotation = [aDecoder decodeIntegerForKey:kCodingKeyRotation];
+    self.animationDuration = [aDecoder decodeDoubleForKey:kCodingKeyAnimationDuration];
+    
+    self.cropRect = [aDecoder decodeCGRectForKey:kCodingKeyCropRect];
+    
+    return self;
+}
+
+#pragma mark - Public
+
+- (void)rotateLeft
+{
+    [self setRotation:self.rotation - 1 animated:YES];
+}
+
+- (void)rotateRight
+{
+    [self setRotation:self.rotation + 1 animated:YES];
+}
+
+#pragma mark - Private
 
 - (UIImage *)imageFromInstance:(id)instance
 {
@@ -448,16 +525,6 @@ CGSize CGSizeAbsolute(CGSize size) {
     self.overlayView.layer.mask = maskLayer;
     [maskLayer release];
     CGPathRelease(path);
-}
-
-- (void)rotateLeft
-{
-    [self setRotation:self.rotation - 1 animated:YES];
-}
-
-- (void)rotateRight
-{
-    [self setRotation:self.rotation + 1 animated:YES];
 }
 
 #pragma mark - Calculations
