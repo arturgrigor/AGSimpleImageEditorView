@@ -1,3 +1,6 @@
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+[![Twitter](https://img.shields.io/badge/twitter-@arturgrigor-blue.svg?style=flat)](http://twitter.com/arturgrigor)
+
 ## AGSimpleImageEditorView
 
 AGSimpleImageEditorView is just another image editor for iOS. The only features that this editor has are image cropping and rotation.
